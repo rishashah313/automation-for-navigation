@@ -13,11 +13,7 @@ class Navigation:
         self.current_queue_text = []
         self.dictionary = {}
         self.current_path = []
-        self.shortest_path = []
-        #self.len_shortest_path
         self.terms_found = []
-        
-        
         self.index_of_paths = {}
         self.destination_urls = []
         self.explored = []
@@ -33,25 +29,10 @@ class Navigation:
         
         
         preprocessed_text = preprocess(content)
-        found = match_unigrams_and_bigrams(preprocessed_text)
-        return found
+        flag_and_terms = match_unigrams_and_bigrams(preprocessed_text)
+        return flag_and_terms[0]# return the flag whether found or not
 
-    '''
-    def spawn_function:
-        
-        explore the links in the url
-            no of links = no of paths
-            make arrays = to no of paths and name them according to counter
-            spawn those many instances of current_path and add the newly found elements if they are not already in the path
-            
-            array_counter + 1
-            array_counter + 1
-            array_counter + 1
-
-            for all the paths:
-                call the explore_url function
-
-    '''
+    
 
     def explore_link(self, url):
 
@@ -365,7 +346,7 @@ if __name__=='__main__':
     driver = webdriver.Chrome(executable_path=r"C:\Users\risha\Downloads\chromedriver_win32\chromedriver.exe")
     num = 0
     x = 1
-    url_file = open("check SHC.txt", "r")
+    url_file = open("text_file.txt", "r")
     while(x == 1):
         
         for url in url_file:

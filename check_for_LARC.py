@@ -56,6 +56,7 @@ load_larc_vocab()
 
 
 def match_unigrams_and_bigrams(preprocessed):
+    flag_and_terms = []
     flag = False
     for i,term in enumerate(preprocessed):
         for obj in arr:
@@ -86,7 +87,11 @@ def match_unigrams_and_bigrams(preprocessed):
                         flag = True
                     else:
                         continue
-    return flag
+    flag_and_terms.append(flag)
+    flag_and_terms.append(term)
+    flag_and_terms.append(term1)
+    flag_and_terms.append(term2)
+    return flag_and_terms
             
                 
 
