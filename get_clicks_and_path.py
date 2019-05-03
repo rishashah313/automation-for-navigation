@@ -5,6 +5,19 @@ from check_for_LARC import *
 from parse_content import *
 #from externalResources1 import *
 
+vocab_for_findByPartialText = []
+    
+
+def load_vocab_for_findByPartialText():
+    text_file = open("vocab_for_findByPartialText.txt","r")
+    for line in text_file:
+            term = line.strip("\n")
+            vocab_for_findByPartialText.append(term)
+    print(vocab_for_findByPartialText)
+
+def load_Data():
+    load_vocab_for_findByPartialText()
+    #load_data_for_knownExternalResources()
 
 class Navigation:
     def __init__(self,root):
@@ -13,11 +26,9 @@ class Navigation:
         self.current_queue_text = []
         self.dictionary = {}
         self.current_path = []
-        self.shortest_path = []
-        #self.len_shortest_path
+        
         self.terms_found = []
         self.pages_containing_external_resources = []
-        
         self.index_of_paths = {}
         self.destination_urls = []
         self.explored = []
@@ -35,28 +46,16 @@ class Navigation:
         preprocessed_text = preprocess(content)
         found = match_unigrams_and_bigrams(preprocessed_text)
         return found
+    
+    
 
-    '''
-    def spawn_function:
-        
-        explore the links in the url
-            no of links = no of paths
-            make arrays = to no of paths and name them according to counter
-            spawn those many instances of current_path and add the newly found elements if they are not already in the path
-            
-            array_counter + 1
-            array_counter + 1
-            array_counter + 1
-
-            for all the paths:
-                call the explore_url function
-
-    '''
+    
 
     def explore_link(self, url):
 
         db_ext = ["www.plannedparenthood.org/","www.bedsider.org/", "www.ppnyc.org/", "www.ashasexualhealth.org/","www.cdc.gov/","www.acha.org","www.smartersex.org/","www.tapestryhealth.org/","medlineplus.gov/","familydoctor.org/","healthy.kaiserpermanente.org/health-wellness",
 "www.mayoclinic.org/", "www.medicinenet.com/", "www.madisonregionalhealth.org/",'www.womenshealth.gov']
+        
         array_explored = []
         current_queue_tracking_no = 0
         external_resource_click = []
@@ -220,142 +219,15 @@ class Navigation:
                             
                     else:
                             print("I am exploring the links")
-                            links1 = driver.find_elements_by_partial_link_text("Services")
-                            links10 = driver.find_elements_by_partial_link_text("SERVICES")
-                            links2 = driver.find_elements_by_partial_link_text("Clinic")
-                            links10 = driver.find_elements_by_partial_link_text("CLINIC")
-                            links3 = driver.find_elements_by_partial_link_text("Women")
-                            links3 = driver.find_elements_by_partial_link_text("WOMEN")
-                            links4 = driver.find_elements_by_partial_link_text("Health")
-                            links3 = driver.find_elements_by_partial_link_text("HEALTH")
-                            links5 = driver.find_elements_by_partial_link_text("Birth")
-                            links3 = driver.find_elements_by_partial_link_text("BIRTH")
-                            links6 = driver.find_elements_by_partial_link_text("Resources")
-                            links3 = driver.find_elements_by_partial_link_text("RESOURCES")
-                            links7 = driver.find_elements_by_partial_link_text("Links")
-                            links3 = driver.find_elements_by_partial_link_text("LINKS")
-                            links8 = driver.find_elements_by_partial_link_text("Online")
-                            links9 = driver.find_elements_by_partial_link_text("Contraception")
+                            for partialText in vocab_for_findByPartialText:
+                                links_found_by_partialText = driver.find_elements_by_partial_link_text(partialText)
+                                if len(links_found_by_partialText) != 0:
+                                    for link_found_by_partialText in links_found_by_partialText:
+                                        links.append(link_found_by_partialText)
+                                        print(link_found_by_partialText.get_attribute("href"))
+                                        print(link_found_by_partialText.text)
                             
-                            links11 = driver.find_elements_by_partial_link_text("Medical")
-                            links12 = driver.find_elements_by_partial_link_text("Sex")
-                            links13 = driver.find_elements_by_partial_link_text("Care")
-                            links14 = driver.find_elements_by_partial_link_text("Birth Control")
-                            links15 = driver.find_elements_by_partial_link_text("Contraceptive")
-                            links16 = driver.find_elements_by_partial_link_text("Wellness")
-
-                            if len(links1) != 0:
-                                for l1 in links1:
-                                    links.append(l1)
-                                    print(l1.get_attribute("href"))
-                                    
-                                    print(l1.text)
-                                    
-                            if len(links2) != 0:
-                                for l2 in links2:
-                                    links.append(l2)
-                                    print(l2.get_attribute("href"))
-                                    
-                                    print(l2.text)
-
-                            if len(links3) != 0:
-                                for l3 in links3:
-                                    links.append(l3)
-                                    print(l3.get_attribute("href"))
-                                    
-                                    print(l3.text)
-
-                            if len(links4) != 0:
-                                for l4 in links4:
-                                    links.append(l4)
-                                    print(l4.get_attribute("href"))
-                                    
-                                    print(l4.text)
-                                    
-                            if len(links5) != 0:
-                                for l5 in links5:
-                                    links.append(l5)
-                                    print(l5.get_attribute("href"))
-                                    
-                                    print(l5.text)
-                                    
-                            if len(links6) != 0:
-                                for l6 in links6:
-                                    links.append(l6)
-                                    print(l6.get_attribute("href"))
-                                    
-                                    print(l6.text)
-                                    
-                            if len(links7) != 0:
-                                for l7 in links7:
-                                    links.append(l7)
-                                    print(l7.get_attribute("href"))
-                                    
-                                    print(l7.text)
-                                    
-                            if len(links8) != 0:
-                                for l8 in links8:
-                                    links.append(l8)
-                                    print(l8.get_attribute("href"))
-                                    
-                                    print(l8.text)
-
-                            if len(links9) != 0:
-                                for l9 in links9:
-                                    links.append(l9)
-                                    print(l9.get_attribute("href"))
-                                    
-                                    print(l9.text)
-
-                            if len(links10) != 0:
-                                for l10 in links10:
-                                    links.append(l10)
-                                    print(l10.get_attribute("href"))
-                                    
-                                    print(l10.text)
-
-                            if len(links11) != 0:
-                                for l11 in links11:
-                                    links.append(l11)
-                                    print(l11.get_attribute("href"))
-                                    
-                                    print(l11.text)
-
-                            if len(links12) != 0:
-                                for l12 in links12:
-                                    links.append(l12)
-                                    print(l12.get_attribute("href"))
-                                    
-                                    print(l12.text)
-
-                            if len(links13) != 0:
-                                for l13 in links13:
-                                    links.append(l13)
-                                    print(l13.get_attribute("href"))
-                                    
-                                    print(l13.text)
-
-                            if len(links14) != 0:
-                                for l14 in links14:
-                                    links.append(l14)
-                                    print(l14.get_attribute("href"))
-                                    
-                                    print(l14.text)
-
-                            if len(links15) != 0:
-                                for l15 in links15:
-                                    links.append(l15)
-                                    print(l15.get_attribute("href"))
-                                    
-                                    print(l15.text)
-
-                            if len(links16) != 0:
-                                for l16 in links16:
-                                    links.append(l16)
-                                    print(l16.get_attribute("href"))
-                                    
-                                    print(l16.text)
-
+                            
                             print("This is the total no. of links got in url %s" % (current_url))
                             print(len(links))
 
@@ -378,13 +250,6 @@ class Navigation:
                                             found_linkHrefs.append(link.get_attribute("href"))
                                             found_linkDict[link.text] = link.get_attribute("href")
                                         
-                                    '''
-                                    if link.get_attribute("href") not in self.current_queue:
-                                        
-                                        self.current_queue.append(link.get_attribute("href"))
-                                        
-                                    '''
-                                    
                                     
                                 except:
                                     continue
@@ -423,22 +288,6 @@ class Navigation:
                             found_linkHrefs = []
                             found_linkDict = {}
                             links = []
-                            links1 = []
-                            links2 = []
-                            links3 = []
-                            links4 = []
-                            links5 = []
-                            links6 = []
-                            links7 = []
-                            links8 = []
-                            links9 = []
-                            links10 = []
-                            links11 = []
-                            links12 = []
-                            links13 = []
-                            links14 = []
-                            links15 = []
-                            links16 = []
                             
                                     
               
@@ -456,6 +305,7 @@ class Navigation:
 
 
 if __name__=='__main__':
+    load_Data() 
     driver = webdriver.Chrome(executable_path=r"C:\Users\risha\Downloads\chromedriver_win32\chromedriver.exe")
     num = 0
     x = 1
