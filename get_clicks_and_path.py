@@ -3,10 +3,9 @@ from selenium.webdriver.common.keys import Keys
 import sys
 from check_for_LARC import *
 from parse_content import *
-#from externalResources1 import *
 
 vocab_for_findByPartialText = []
-    
+data_for_knownExternalResources = []    
 
 def load_vocab_for_findByPartialText():
     text_file = open("vocab_for_findByPartialText.txt","r")
@@ -15,9 +14,16 @@ def load_vocab_for_findByPartialText():
             vocab_for_findByPartialText.append(term)
     print(vocab_for_findByPartialText)
 
+def load_data_for_knownExternalResources():
+    text_file = open("data_for_knownExternalResources.txt","r")
+    for line in text_file:
+            url = line.strip("\n")
+            data_for_knownExternalResources.append(url)
+    print(data_for_knownExternalResources)
+
 def load_Data():
     load_vocab_for_findByPartialText()
-    #load_data_for_knownExternalResources()
+    load_data_for_knownExternalResources()
 
 class Navigation:
     def __init__(self,root):
@@ -26,7 +32,6 @@ class Navigation:
         self.current_queue_text = []
         self.dictionary = {}
         self.current_path = []
-        
         self.terms_found = []
         self.pages_containing_external_resources = []
         self.index_of_paths = {}
@@ -47,14 +52,7 @@ class Navigation:
         found = match_unigrams_and_bigrams(preprocessed_text)
         return found
     
-    
-
-    
-
     def explore_link(self, url):
-
-        db_ext = ["www.plannedparenthood.org/","www.bedsider.org/", "www.ppnyc.org/", "www.ashasexualhealth.org/","www.cdc.gov/","www.acha.org","www.smartersex.org/","www.tapestryhealth.org/","medlineplus.gov/","familydoctor.org/","healthy.kaiserpermanente.org/health-wellness",
-"www.mayoclinic.org/", "www.medicinenet.com/", "www.madisonregionalhealth.org/",'www.womenshealth.gov']
         
         array_explored = []
         current_queue_tracking_no = 0
@@ -77,7 +75,7 @@ class Navigation:
             self.current_queue_text.append("student health center url")# root
             print("root appended to self.current_queue")
             print("current queue is : {}".format(self.current_queue))
-            #"path"+str(counter_for_paths)
+            
             path_now = []
             path_now.append(url)
             self.dictionary.update({counter_for_paths:path_now })
@@ -241,9 +239,9 @@ class Navigation:
                                     
                                     #link.send_keys(Keys.CONTROL + Keys.RETURN)
                                     print(link.get_attribute("href"))
-                                    #print("before link text")
+                                    
                                     print(link.text)
-                                    #print("after link text")
+                                    
                                     if "mail" not in link.get_attribute("href") and ".pdf" not in link.get_attribute("href") and "javascript" not in link.get_attribute("href") and "facebook" not in link.get_attribute("href") and ".PDF" not in link.get_attribute("href"):
                                         if link.text not in found_linkTexts:
                                             found_linkTexts.append(link.text)
@@ -276,13 +274,7 @@ class Navigation:
                                 
                                     self.current_queue.append(k)
                                     self.current_queue_text.append(found_linkTexts[i])
-
-                            """
-                            for k in found_linkHrefs:
-                                if k not in self.current_queue:
-                                
-                                    self.current_queue.append(k)
-                            """                        
+                      
                                 
                             found_linkTexts = []
                             found_linkHrefs = []
