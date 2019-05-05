@@ -89,7 +89,7 @@ class Navigation:
             
         
         while self.current_queue:
-            if(len(self.dictionary)>200):
+            if(len(self.dictionary)>700):
                 print("external_resource_path")
                 print(external_resource_path)
                 print("external_resource_click")
@@ -134,7 +134,7 @@ class Navigation:
                 print("########printing all the external links#######")
                 print(external_links)
                 for el in external_links:
-                    for r in db_ext:
+                    for r in data_for_knownExternalResources:
                         if r in el:
                             print("***External Resource***")
                             print(el)
@@ -165,13 +165,17 @@ class Navigation:
                                     elif(temp_path_ext[-1] == current_url_Text):
                                         print("here again")
                                         correct_path_ext = temp_path_ext
+                                        correct_unique_path_ext = []
+                                        for link_member in correct_path_ext:
+                                            if link_member not in correct_unique_path_ext:
+                                                correct_unique_path_ext.append(link_member)
                                         print("key")
                                         print(k)
                                         print("This path is getting appended")
-                                        print(correct_path_ext)
-                                        if correct_path_ext not in external_resource_path:
-                                            external_resource_path.append(correct_path_ext)
-                                            external_resource_click.append(len(correct_path_ext)-1)
+                                        print(correct_unique_path_ext)
+                                        if correct_unique_path_ext not in external_resource_path:
+                                            external_resource_path.append(correct_unique_path_ext)
+                                            external_resource_click.append(len(correct_unique_path_ext)-1)
                                             self.pages_containing_external_resources.append(current_url)
                                             print("pages_containing_external_resources")
                                             print(self.pages_containing_external_resources)
@@ -188,6 +192,7 @@ class Navigation:
                     found = self.check_keywords(content)
                     
                     if(found):
+                        
                             self.destination_urls.append(url)
                             #print("URLs with LARC")
                             #print(self.destination_urls)
@@ -200,13 +205,20 @@ class Navigation:
                                     print("key")
                                     print(k)
                                     break
-                                
-                                    
-                                
-                            
-                            print("Mention found in path {}".format(correct_path))
-                            print(correct_path)
-                            print("No of clicks: {}" .format(len(correct_path)-1))
+                                elif(temp_path[-1] == current_url):
+                                    correct_path = temp_path
+                                    print("key")
+                                    print(k)
+                                    break
+                                   
+                            correct_unique_path = []
+                            for link_member in correct_path:
+                                if link_member not in correct_unique_path:
+                                    correct_unique_path.append(link_member)
+                               
+                        
+                            print("Mention found in path {}".format(correct_unique_path))
+                            print("No of clicks: {}" .format(len(correct_unique_path)-1))
                             
                             self.destination_urls = []
                             print("external_resource_path")
