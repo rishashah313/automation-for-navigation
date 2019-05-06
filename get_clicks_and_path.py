@@ -12,15 +12,13 @@ def load_vocab_for_findByPartialText():
     for line in text_file:
             term = line.strip("\n")
             vocab_for_findByPartialText.append(term)
-    print(vocab_for_findByPartialText)
 
 def load_data_for_knownExternalResources():
     text_file = open("data_for_knownExternalResources.txt","r")
     for line in text_file:
             url = line.strip("\n")
             data_for_knownExternalResources.append(url)
-    print(data_for_knownExternalResources)
-
+    
 def load_Data():
     load_vocab_for_findByPartialText()
     load_data_for_knownExternalResources()
@@ -33,7 +31,11 @@ class Navigation:
         self.dictionary = {}
         self.current_path = []
         self.terms_found = []
-        self.pages_containing_external_resources = []
+        self.all_external_resources_found = []
+        self.all_pages_mentioning_external_resources = []
+        self.dict_extResource_pageItWasFound = {}
+        self.dict_extResource_pathToIt = {}
+        self.dict_extResource_NoOfClicks= {}
         self.index_of_paths = {}
         self.destination_urls = []
         self.explored = []
@@ -47,14 +49,15 @@ class Navigation:
 
     def check_keywords(self, content):
         
-        
+        flag_and_terms = []
         preprocessed_text = preprocess(content)
-        found = match_unigrams_and_bigrams(preprocessed_text)
-        return found
+        flag_and_terms = match_unigrams_and_bigrams(preprocessed_text)
+        return flag_and_terms
     
     def explore_link(self, url):
         
         array_explored = []
+        terms_found_temp = []
         current_queue_tracking_no = 0
         external_resource_click = []
         external_resource_path = []
@@ -146,19 +149,23 @@ class Navigation:
                                     print("here")
                                     temp_path_ext = self.dictionary[k]
 
-                                    if(temp_path_ext[-1] == current_url):
+                                    if(temp_path_ext[-1] == current_url):#(If the external resource is found on the home page i.e. the root SHC page)
                                         correct_path_ext = temp_path_ext
+                                        correct_unique_path_ext = []
+                                        for link_member in correct_path_ext:
+                                            if link_member not in correct_unique_path_ext:
+                                                correct_unique_path_ext.append(link_member)
                                         print("key")
                                         print(k)
                                         print("This path is getting appended")
-                                        print(correct_path_ext)
-                                        if correct_path_ext not in external_resource_path:
+                                        print(correct_unique_path_ext)
+                                        if correct_unique_path_ext not in external_resource_path:
                                             
-                                            external_resource_path.append(correct_path_ext)
-                                            external_resource_click.append(len(correct_path_ext)-1)
-                                            self.pages_containing_external_resources.append(current_url)
-                                            print("pages_containing_external_resources")
-                                            print(self.pages_containing_external_resources)
+                                            external_resource_path.append(correct_unique_path_ext)
+                                            external_resource_click.append(len(correct_unique_path_ext)-1)
+                                            self.all_pages_mentioning_external_resources.append(current_url)
+                                            print("all_pages_mentioning_external_resources")
+                                            print(self.all_pages_mentioning_external_resources)
                                         break
                                         
                                         
@@ -176,22 +183,22 @@ class Navigation:
                                         if correct_unique_path_ext not in external_resource_path:
                                             external_resource_path.append(correct_unique_path_ext)
                                             external_resource_click.append(len(correct_unique_path_ext)-1)
-                                            self.pages_containing_external_resources.append(current_url)
-                                            print("pages_containing_external_resources")
-                                            print(self.pages_containing_external_resources)
+                                            self.all_pages_mentioning_external_resources.append(current_url)
+                                            print("all_pages_mentioning_external_resources")
+                                            print(self.all_pages_mentioning_external_resources)
                                         break
                 external_links = []
                 all_links = []
-                print("external links after emptying")
-                print(external_links)
                 driver.get(current_url)
 
                 content = self.check_if_parsing_allowed(current_url)
                 if (content != "Invalid"):
-                
-                    found = self.check_keywords(content)
                     
-                    if(found):
+                    flag_and_terms = self.check_keywords(content)
+                    print("flag_and_terms[0][0]")
+                    print(flag_and_terms[0][0])
+                    
+                    if(flag_and_terms[0][0]):
                         
                             self.destination_urls.append(url)
                             #print("URLs with LARC")
@@ -218,8 +225,25 @@ class Navigation:
                                
                         
                             print("Mention found in path {}".format(correct_unique_path))
-                            print("No of clicks: {}" .format(len(correct_unique_path)-1))
+                            print("Terms found:")
+                            for n in range(len(flag_and_terms)):
+                                if(flag_and_terms[n][1]):
+                                    print(flag_and_terms[n][1])
+                                    if (flag_and_terms[n][2] == ""):
+                                        terms_found_temp.append(flag_and_terms[n][1])
+                                if(flag_and_terms[n][2]):
+                                    print(flag_and_terms[n][2])
+                                    term_found = flag_and_terms[n][1] + " " + flag_and_terms[n][2]
+                                    terms_found_temp.append(term_found)
+
+                            for term in terms_found_temp:
+                                if term not in self.terms_found:
+                                    self.terms_found.append(term)
+                            print("Terms found array:")
+                            print(self.terms_found)
                             
+                            print("No of clicks: {}" .format(len(correct_unique_path)-1))
+                            flag_and_terms = []
                             self.destination_urls = []
                             print("external_resource_path")
                             print(external_resource_path)

@@ -56,7 +56,15 @@ load_larc_vocab()
 
 
 def match_unigrams_and_bigrams(preprocessed):
+    #The size of the multidimensional array would be the no. of hits in a single page, there will be an array for each hit
+    #If the flag is False, the multidimensional array has only one array
+    flag_and_terms = []
+    
+    n = 0
     flag = False
+    term = ""
+    term1 = ""
+    term2 = ""
     for i,term in enumerate(preprocessed):
         for obj in arr:
             #print(obj)
@@ -74,7 +82,11 @@ def match_unigrams_and_bigrams(preprocessed):
                 if term == term1:
                     print("match found: " + term)
                     flag = True
-        
+                    flag_and_terms.append([])
+                    flag_and_terms[n].append(flag)
+                    flag_and_terms[n].append(term)
+                    flag_and_terms[n].append("")#Just to the sizes of the arrays consistent
+                    n = n + 1
             else:
             
                 term1 = normalize_and_stem(term1)
@@ -84,9 +96,23 @@ def match_unigrams_and_bigrams(preprocessed):
                     if preprocessed[i+1] == term2:
                         print("match found: " + term1 + " " + term2)
                         flag = True
+                        flag_and_terms.append([])
+                        flag_and_terms[n].append(flag)
+                        flag_and_terms[n].append(term1)
+                        flag_and_terms[n].append(term2)
+                        n = n + 1
                     else:
                         continue
-    return flag
+    if(flag == False) :
+        flag_and_terms.append([])
+        print(flag_and_terms)
+        
+        flag_and_terms[n].append(flag)
+        #flag_and_terms.append("")
+        #flag_and_terms.append("")
+    print(flag_and_terms)
+    print(len(flag_and_terms))
+    return flag_and_terms
             
                 
 
