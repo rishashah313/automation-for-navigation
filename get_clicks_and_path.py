@@ -97,6 +97,12 @@ class Navigation:
                 print(external_resource_path)
                 print("external_resource_click")
                 print(external_resource_click)
+                print("self.dict_extResource_pageItWasFound")
+                print(self.dict_extResource_pageItWasFound)
+                print("self.dict_extResource_pathToIt")
+                print(self.dict_extResource_pathToIt)
+                print("self.dict_extResource_NoOfClicks")
+                print(self.dict_extResource_NoOfClicks)
                 break
             else:
                 
@@ -125,6 +131,7 @@ class Navigation:
                 print("Current Url")
                 print(current_url)
                 print("has been popped")
+                driver.get(current_url)
                 ext_links = driver.find_elements_by_xpath("//a[@href]")
                 for ext_link in ext_links:
                 
@@ -155,10 +162,27 @@ class Navigation:
                                         for link_member in correct_path_ext:
                                             if link_member not in correct_unique_path_ext:
                                                 correct_unique_path_ext.append(link_member)
+                                        
                                         print("key")
                                         print(k)
                                         print("This path is getting appended")
                                         print(correct_unique_path_ext)
+                                        if el not in self.dict_extResource_pageItWasFound.keys():
+                                            self.dict_extResource_pageItWasFound[el] = [current_url]
+                                        else:
+                                            self.dict_extResource_pageItWasFound[el].append(current_url)
+                                            
+                                        if el not in self.dict_extResource_pathToIt.keys():
+                                            self.dict_extResource_pathToIt[el] = [correct_unique_path_ext]
+                                        else:
+                                            self.dict_extResource_pathToIt[el].append(correct_unique_path_ext)
+                                            
+                                        if el not in self.dict_extResource_NoOfClicks.keys():
+                                            self.dict_extResource_NoOfClicks[el] = [len(correct_unique_path_ext) - 1]
+                                        else:
+                                            self.dict_extResource_NoOfClicks[el].append(len(correct_unique_path_ext) - 1)
+                                            
+                                        
                                         if correct_unique_path_ext not in external_resource_path:
                                             
                                             external_resource_path.append(correct_unique_path_ext)
@@ -180,6 +204,20 @@ class Navigation:
                                         print(k)
                                         print("This path is getting appended")
                                         print(correct_unique_path_ext)
+                                        if el not in self.dict_extResource_pageItWasFound.keys():
+                                            self.dict_extResource_pageItWasFound[el] = [current_url]
+                                        else:
+                                            self.dict_extResource_pageItWasFound[el].append(current_url)
+                                            
+                                        if el not in self.dict_extResource_pathToIt.keys():
+                                            self.dict_extResource_pathToIt[el] = [correct_unique_path_ext]
+                                        else:
+                                            self.dict_extResource_pathToIt[el].append(correct_unique_path_ext)
+                                            
+                                        if el not in self.dict_extResource_NoOfClicks.keys():
+                                            self.dict_extResource_NoOfClicks[el] = [len(correct_unique_path_ext) - 1]
+                                        else:
+                                            self.dict_extResource_NoOfClicks[el].append(len(correct_unique_path_ext) - 1)
                                         if correct_unique_path_ext not in external_resource_path:
                                             external_resource_path.append(correct_unique_path_ext)
                                             external_resource_click.append(len(correct_unique_path_ext)-1)
@@ -189,7 +227,7 @@ class Navigation:
                                         break
                 external_links = []
                 all_links = []
-                driver.get(current_url)
+                
 
                 content = self.check_if_parsing_allowed(current_url)
                 if (content != "Invalid"):
@@ -249,6 +287,12 @@ class Navigation:
                             print(external_resource_path)
                             print("external_resource_click")
                             print(external_resource_click)
+                            print("self.dict_extResource_pageItWasFound")
+                            print(self.dict_extResource_pageItWasFound)
+                            print("self.dict_extResource_pathToIt")
+                            print(self.dict_extResource_pathToIt)
+                            print("self.dict_extResource_NoOfClicks")
+                            print(self.dict_extResource_NoOfClicks)
                             break
                             
                     else:
@@ -337,7 +381,7 @@ if __name__=='__main__':
     driver = webdriver.Chrome(executable_path=r"C:\Users\risha\Downloads\chromedriver_win32\chromedriver.exe")
     num = 0
     x = 1
-    url_file = open("Univ for debugging.txt", "r")
+    url_file = open("check SHC.txt", "r")
     while(x == 1):
         
         for url in url_file:
