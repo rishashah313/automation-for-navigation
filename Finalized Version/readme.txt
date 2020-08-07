@@ -1,1 +1,6 @@
+The input given to the algorithm for navigation is the university’s SHC URL. The algorithm is designed to achieve the following goals:
+1) Count the minimum number of clicks to LARC content, if present, beginning at the SHC homepage of a university.
+2) Record other information along the course of navigation that includes: the shortest path to LARC, the URL of the webpage on which LARC information was found, the external health websites that the SHC website has pointed to, the URLs of the webpages that have mentions of external resources on them, whether there are dedicated women’s health section links on the health center website, the names of all such sections and the text from the webpage that contains LARC.
+Since we wanted to make the navigation an automated process, we had to automate the process of clicking through the pages of the website. To achieve this, we have built a framework using browser automation or ‘Headless browsing’. We have used Selenium WebDriver for building an automated browsing framework.
 
+As the goal is to find the shortest path to LARC, it is necessary to apply a breadth-first search approach to explore the links on the SHC websites.
